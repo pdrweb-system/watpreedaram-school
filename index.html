@@ -303,6 +303,12 @@
   .dept-card { border: 1px solid var(--line); border-radius: 4px; padding: 24px; background: var(--cream); }
   .dept-card .dept-name { font-family: 'Sarabun', sans-serif; font-weight: 600; color: var(--green-deep); font-size: 1.02rem; margin-bottom: 8px; }
   .dept-card p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
+  .dept-card .dept-link {
+    display: inline-block; margin-top: 14px; font-size: 0.85rem; font-weight: 600;
+    color: var(--green-mid); text-decoration: none; border-bottom: 1px solid var(--green-mid);
+    padding-bottom: 2px; transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .dept-card .dept-link:hover { color: var(--gold); border-color: var(--gold); }
 
   /* ---------- CONTACT ---------- */
   .contact-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; margin-top: 34px; align-items: start; }
@@ -493,22 +499,26 @@
         <div class="dept-card">
           <div class="dept-name">ฝ่ายบริหารงานวิชาการ</div>
           <p>ดูแลหลักสูตร การจัดการเรียนการสอน การวัดและประเมินผล สื่อและแหล่งเรียนรู้ของโรงเรียน</p>
+          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานวิชาการ →</a>
         </div>
         <div class="dept-card">
           <div class="dept-name">ฝ่ายบริหารงานงบประมาณ</div>
           <p>ดูแลการเงิน พัสดุ ทรัพย์สินของโรงเรียน และการจัดทำแผนงบประมาณประจำปี</p>
+          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานงบประมาณ →</a>
         </div>
         <div class="dept-card">
           <div class="dept-name">ฝ่ายบริหารงานบุคคล</div>
           <p>ดูแลอัตรากำลัง การพัฒนาบุคลากร ขวัญกำลังใจ และงานทะเบียนประวัติครู-บุคลากร</p>
+          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานบุคคล →</a>
         </div>
         <div class="dept-card">
           <div class="dept-name">ฝ่ายบริหารงานทั่วไป</div>
           <p>ดูแลอาคารสถานที่ งานสัมพันธ์ชุมชน งานธุรการ และกิจการนักเรียนโดยรวม</p>
+          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานทั่วไป →</a>
         </div>
       </div>
       <div class="info-note">
-        แจ้งชื่อหัวหน้าแต่ละฝ่ายหรือรายละเอียดงานเพิ่มเติมได้ จะปรับเนื้อหาให้ตรงกับโครงสร้างจริงของโรงเรียน
+        แจ้งชื่อหัวหน้าแต่ละฝ่าย รายละเอียดงาน หรือลิงก์ระบบงานจริงของแต่ละฝ่ายเพิ่มเติมได้ จะปรับเนื้อหาให้ตรงกับโครงสร้างจริงของโรงเรียน (ปุ่ม "เข้าสู่ระบบงาน" ด้านบนยังเป็นลิงก์ตัวอย่าง รอ URL ระบบจริง)
       </div>
     </div>
   </section>
