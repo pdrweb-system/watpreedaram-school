@@ -289,6 +289,15 @@
   .staff-lead h3 { font-family: 'Sarabun', sans-serif; font-weight: 600; color: var(--green-deep); font-size: 1.08rem; }
   .staff-lead p { margin: 6px 0 0; color: var(--ink-soft); font-size: 0.9rem; }
 
+  .staff-lead-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+  .staff-lead-grid .staff-lead { flex: 1 1 320px; margin-top: 0; }
+
+  .staff-group { margin-top: 40px; }
+  .staff-group-title {
+    font-family: 'Sarabun', sans-serif; font-weight: 600; color: var(--green-deep);
+    font-size: 1rem; padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 18px;
+  }
+
   .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
   @media (max-width: 700px) { .staff-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 460px) { .staff-grid { grid-template-columns: 1fr; } }
@@ -466,21 +475,16 @@
   </div>
   <section>
     <div class="wrap">
-      <div class="staff-lead">
-        <div class="avatar">ผอ</div>
-        <div>
-          <div class="role">ผู้อำนวยการโรงเรียน</div>
-          <h3>ระบุชื่อ-นามสกุลผู้อำนวยการ</h3>
-          <p>ส่งชื่อและรูปถ่ายผู้บริหารมาให้ได้ จะใส่ประวัติโดยย่อเพิ่มเติมให้</p>
-        </div>
-      </div>
+      <h2 class="section-title">ผู้บริหาร</h2>
+      <p class="section-sub">คณะผู้บริหารโรงเรียนวัดปรีดาราม</p>
+      <div class="staff-lead-grid" id="adminGrid"></div>
 
-      <h2 class="section-title" style="margin-top:44px;">คณะครูผู้สอน</h2>
-      <p class="section-sub">ตัวอย่างการจัดวาง — รอข้อมูลชื่อครูและวิชา/ระดับชั้นที่สอนจริง</p>
-      <div class="staff-grid" id="staffGrid"></div>
+      <h2 class="section-title" style="margin-top:48px;">กลุ่มสาระการเรียนรู้</h2>
+      <p class="section-sub">ตัวอย่างการจัดวาง — รอข้อมูลชื่อครูและวิชา/ระดับชั้นที่สอนจริงของแต่ละกลุ่มสาระ</p>
+      <div id="staffGroups"></div>
 
       <div class="info-note">
-        ส่งรายชื่อครู วิชา/ระดับชั้นที่สอน และรูปถ่าย (ถ้ามี) มาให้ได้เลย จะจัดเรียงตามกลุ่มสาระหรือระดับชั้นให้เหมาะสม
+        ส่งรายชื่อผู้บริหาร รายชื่อครูแยกตามกลุ่มสาระ วิชา/ระดับชั้นที่สอน และรูปถ่าย (ถ้ามี) มาให้ได้เลย จะจัดเรียงให้ตรงกับโครงสร้างจริงของโรงเรียน
       </div>
     </div>
   </section>
@@ -600,21 +604,61 @@
   renderNews(document.getElementById('homeNewsPreview'), newsSample.slice(0, 3));
   renderNews(document.getElementById('newsFullList'), newsSample);
 
-  var staffSample = [
-    { initial: 'ค1', name: 'ระบุชื่อครูท่านที่ 1', subj: 'ระบุวิชา/ระดับชั้น' },
-    { initial: 'ค2', name: 'ระบุชื่อครูท่านที่ 2', subj: 'ระบุวิชา/ระดับชั้น' },
-    { initial: 'ค3', name: 'ระบุชื่อครูท่านที่ 3', subj: 'ระบุวิชา/ระดับชั้น' },
-    { initial: 'ค4', name: 'ระบุชื่อครูท่านที่ 4', subj: 'ระบุวิชา/ระดับชั้น' },
-    { initial: 'ค5', name: 'ระบุชื่อครูท่านที่ 5', subj: 'ระบุวิชา/ระดับชั้น' },
-    { initial: 'ค6', name: 'ระบุชื่อครูท่านที่ 6', subj: 'ระบุวิชา/ระดับชั้น' }
+  var adminSample = [
+    { initial: 'ผอ', role: 'ผู้อำนวยการโรงเรียน', name: 'ระบุชื่อ-นามสกุลผู้อำนวยการ', note: 'ส่งชื่อและรูปถ่ายผู้บริหารมาให้ได้ จะใส่ประวัติโดยย่อเพิ่มเติมให้' }
   ];
-  var staffGrid = document.getElementById('staffGrid');
-  if (staffGrid) {
-    staffGrid.innerHTML = staffSample.map(function (t) {
-      return '<div class="staff-card">' +
-        '<div class="avatar">' + t.initial + '</div>' +
-        '<h4>' + t.name + '</h4>' +
-        '<div class="subj">' + t.subj + '</div>' +
+  var adminGrid = document.getElementById('adminGrid');
+  if (adminGrid) {
+    adminGrid.innerHTML = adminSample.map(function (a) {
+      return '<div class="staff-lead">' +
+        '<div class="avatar">' + a.initial + '</div>' +
+        '<div>' +
+        '<div class="role">' + a.role + '</div>' +
+        '<h3>' + a.name + '</h3>' +
+        '<p>' + a.note + '</p>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  var staffGroups = [
+    { group: 'กลุ่มสาระการเรียนรู้ภาษาไทย', teachers: [
+      { initial: 'ค1', name: 'ระบุชื่อครูท่านที่ 1', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้คณิตศาสตร์', teachers: [
+      { initial: 'ค2', name: 'ระบุชื่อครูท่านที่ 2', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี', teachers: [
+      { initial: 'ค3', name: 'ระบุชื่อครูท่านที่ 3', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม', teachers: [
+      { initial: 'ค4', name: 'ระบุชื่อครูท่านที่ 4', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา', teachers: [
+      { initial: 'ค5', name: 'ระบุชื่อครูท่านที่ 5', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้ศิลปะ', teachers: [
+      { initial: 'ค6', name: 'ระบุชื่อครูท่านที่ 6', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้การงานอาชีพ', teachers: [
+      { initial: 'ค7', name: 'ระบุชื่อครูท่านที่ 7', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] },
+    { group: 'กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ', teachers: [
+      { initial: 'ค8', name: 'ระบุชื่อครูท่านที่ 8', subj: 'ระบุวิชา/ระดับชั้น' }
+    ] }
+  ];
+  var staffGroupsEl = document.getElementById('staffGroups');
+  if (staffGroupsEl) {
+    staffGroupsEl.innerHTML = staffGroups.map(function (g) {
+      var cards = g.teachers.map(function (t) {
+        return '<div class="staff-card">' +
+          '<div class="avatar">' + t.initial + '</div>' +
+          '<h4>' + t.name + '</h4>' +
+          '<div class="subj">' + t.subj + '</div>' +
+          '</div>';
+      }).join('');
+      return '<div class="staff-group">' +
+        '<div class="staff-group-title">' + g.group + '</div>' +
+        '<div class="staff-grid">' + cards + '</div>' +
         '</div>';
     }).join('');
   }
