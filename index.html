@@ -292,11 +292,24 @@
   .staff-lead-grid { display: flex; flex-wrap: wrap; gap: 20px; }
   .staff-lead-grid .staff-lead { flex: 1 1 320px; margin-top: 0; }
 
-  .staff-group { margin-top: 40px; }
-  .staff-group-title {
-    font-family: 'Sarabun', sans-serif; font-weight: 600; color: var(--green-deep);
-    font-size: 1rem; padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 18px;
+  .staff-group {
+    border: 1px solid var(--line); border-radius: 4px; margin-top: 14px;
+    overflow: hidden; background: var(--cream);
   }
+  .staff-group:first-child { margin-top: 24px; }
+  .staff-group-toggle {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--paper); border: none; cursor: pointer; font: inherit;
+    font-family: 'Sarabun', sans-serif; font-weight: 600; color: var(--green-deep);
+    font-size: 1rem; padding: 16px 20px; text-align: left;
+  }
+  .staff-group-toggle .chevron {
+    flex-shrink: 0; color: var(--green-mid); font-size: 0.85rem; transition: transform 0.2s ease;
+  }
+  .staff-group.is-open .staff-group-toggle .chevron { transform: rotate(180deg); }
+  .staff-group-body { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+  .staff-group.is-open .staff-group-body { max-height: 2000px; }
+  .staff-group-body .staff-grid { margin: 0; padding: 20px; }
 
   .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
   @media (max-width: 700px) { .staff-grid { grid-template-columns: 1fr 1fr; } }
@@ -657,10 +670,21 @@
           '</div>';
       }).join('');
       return '<div class="staff-group">' +
-        '<div class="staff-group-title">' + g.group + '</div>' +
-        '<div class="staff-grid">' + cards + '</div>' +
+        '<button class="staff-group-toggle" type="button" aria-expanded="false">' +
+        '<span>' + g.group + '</span>' +
+        '<span class="chevron">▾</span>' +
+        '</button>' +
+        '<div class="staff-group-body"><div class="staff-grid">' + cards + '</div></div>' +
         '</div>';
     }).join('');
+
+    staffGroupsEl.addEventListener('click', function (e) {
+      var toggle = e.target.closest('.staff-group-toggle');
+      if (!toggle) return;
+      var group = toggle.closest('.staff-group');
+      var isOpen = group.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
   }
 
   function showRoute(route) {
