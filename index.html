@@ -315,6 +315,8 @@
     background: var(--paper); display: flex; align-items: center; justify-content: center;
     color: var(--ink-soft); font-size: 0.88rem; text-align: center; padding: 24px;
   }
+  .map-box.has-iframe { padding: 0; }
+  .map-box iframe { width: 100%; height: 100%; border: 0; }
 
   /* ---------- Generic note box ---------- */
   .info-note {
@@ -494,11 +496,11 @@
       <div class="staff-lead-grid" id="adminGrid"></div>
 
       <h2 class="section-title" style="margin-top:48px;">กลุ่มสาระการเรียนรู้</h2>
-      <p class="section-sub">ตัวอย่างการจัดวาง — รอข้อมูลชื่อครูและวิชา/ระดับชั้นที่สอนจริงของแต่ละกลุ่มสาระ</p>
+      <p class="section-sub">คณะครูผู้สอนแยกตามกลุ่มสาระการเรียนรู้</p>
       <div id="staffGroups"></div>
 
       <div class="info-note">
-        ส่งรายชื่อผู้บริหาร รายชื่อครูแยกตามกลุ่มสาระ วิชา/ระดับชั้นที่สอน และรูปถ่าย (ถ้ามี) มาให้ได้เลย จะจัดเรียงให้ตรงกับโครงสร้างจริงของโรงเรียน
+        ข้อมูลผู้บริหารและรายชื่อครูจัดการผ่าน Google Sheet ของโรงเรียน แก้ไขที่ชีตแล้วหน้านี้จะอัปเดตตามอัตโนมัติ
       </div>
     </div>
   </section>
@@ -512,32 +514,10 @@
   </div>
   <section>
     <div class="wrap">
-      <p class="section-sub">โครงสร้างเบื้องต้นตามกรอบการบริหารงานสถานศึกษา 4 ฝ่ายหลัก — ปรับชื่อฝ่าย หัวหน้าฝ่าย และขอบเขตงานให้ตรงกับโรงเรียนได้ตามจริง</p>
-      <div class="dept-grid">
-        <div class="dept-card">
-          <div class="dept-name">ฝ่ายบริหารงานวิชาการ</div>
-          <p>ดูแลหลักสูตร การจัดการเรียนการสอน การวัดและประเมินผล สื่อและแหล่งเรียนรู้ของโรงเรียน</p>
-          <a class="dept-link" href="https://script.google.com/macros/s/AKfycbxvwWgT3gYz6DLAabHaS3onb5QwxgF1Pmnqe2srjiAnIm2n0i2Lc6XkuHtNKvUapDeX/exec" target="_blank" rel="noopener">ระบบประเมิน SDQ ( นักเรียนประเมินตนเอง ) →</a>
-        </div>
-        <div class="dept-card">
-          <div class="dept-name">ฝ่ายบริหารงานงบประมาณ</div>
-          <p>ดูแลการเงิน พัสดุ ทรัพย์สินของโรงเรียน และการจัดทำแผนงบประมาณประจำปี</p>
-          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานงบประมาณ →</a>
-        </div>
-        <div class="dept-card">
-          <div class="dept-name">ฝ่ายบริหารงานบุคคล</div>
-          <p>ดูแลอัตรากำลัง การพัฒนาบุคลากร ขวัญกำลังใจ และงานทะเบียนประวัติครู-บุคลากร</p>
-          <a class="dept-link" href="https://pdrweb-system.github.io/leavesystem/" target="_blank" rel="noopener">ระบบการลาออนไลน์</a><br>
-          <a class="dept-link" href="https://script.google.com/macros/s/AKfycbyALyaJatJ--njMdcXTTb0e2B87Em7AfI2aXlpOc3qeGmEXVIcsFFn1JAVT9Emz5sNgCw/exec" target="_blank" rel="noopener">ระบบประเมินตนเองเพื่อใช้ในการเลื่อนเงินเดือน</a>
-        </div>
-        <div class="dept-card">
-          <div class="dept-name">ฝ่ายบริหารงานทั่วไป</div>
-          <p>ดูแลอาคารสถานที่ งานสัมพันธ์ชุมชน งานธุรการ และกิจการนักเรียนโดยรวม</p>
-          <a class="dept-link" href="#" target="_blank" rel="noopener">เข้าสู่ระบบงานทั่วไป →</a>
-        </div>
-      </div>
+      <p class="section-sub">โครงสร้างเบื้องต้นตามกรอบการบริหารงานสถานศึกษา 4 ฝ่ายหลัก</p>
+      <div class="dept-grid" id="deptGrid"></div>
       <div class="info-note">
-        แจ้งชื่อหัวหน้าแต่ละฝ่าย รายละเอียดงาน หรือลิงก์ระบบงานจริงของแต่ละฝ่ายเพิ่มเติมได้ จะปรับเนื้อหาให้ตรงกับโครงสร้างจริงของโรงเรียน (ปุ่ม "เข้าสู่ระบบงาน" ด้านบนยังเป็นลิงก์ตัวอย่าง รอ URL ระบบจริง)
+        ข้อมูลฝ่ายงานและลิงก์ระบบงานจัดการผ่าน Google Sheet ของโรงเรียน แก้ไขที่ชีตแล้วหน้านี้จะอัปเดตตามอัตโนมัติ
       </div>
     </div>
   </section>
@@ -553,17 +533,12 @@
     <div class="wrap">
       <div class="contact-grid">
         <div>
-          <ul class="contact-list">
-            <li><span class="k">ที่อยู่</span><span class="v">ระบุที่อยู่โรงเรียนที่นี่</span></li>
-            <li><span class="k">โทรศัพท์</span><span class="v">ระบุเบอร์โทรศัพท์</span></li>
-            <li><span class="k">อีเมล</span><span class="v">ระบุอีเมลติดต่อ</span></li>
-            <li><span class="k">Facebook</span><span class="v"><a href="https://www.facebook.com/preedaramschool1" target="_blank" rel="noopener">facebook.com/preedaramschool1</a></span></li>
-          </ul>
+          <ul class="contact-list" id="contactList"></ul>
           <div class="contact-note">
-            ส่วนนี้ยังเป็นข้อมูลตัวอย่าง — ส่งที่อยู่ เบอร์โทร อีเมล และลิงก์โซเชียลของโรงเรียนมาให้ได้เลย จะใส่ให้ครบถ้วน
+            ข้อมูลติดต่อจัดการผ่าน Google Sheet ของโรงเรียน แก้ไขที่ชีตแล้วหน้านี้จะอัปเดตตามอัตโนมัติ
           </div>
         </div>
-        <div class="map-box">แผนที่โรงเรียนจะแสดงที่นี่<br>เมื่อได้รับพิกัดหรือที่อยู่</div>
+        <div class="map-box" id="mapBox">แผนที่โรงเรียนจะแสดงที่นี่<br>เมื่อได้รับพิกัดหรือที่อยู่</div>
       </div>
     </div>
   </section>
@@ -595,12 +570,69 @@
     contact: 'ติดต่อเรา | โรงเรียนวัดปรีดาราม'
   };
 
-  var adminSample = [
-    { initial: 'ผอ', role: 'ผู้อำนวยการโรงเรียน', name: 'ระบุชื่อ-นามสกุลผู้อำนวยการ', note: 'ส่งชื่อและรูปถ่ายผู้บริหารมาให้ได้ จะใส่ประวัติโดยย่อเพิ่มเติมให้' }
-  ];
-  var adminGrid = document.getElementById('adminGrid');
-  if (adminGrid) {
-    adminGrid.innerHTML = adminSample.map(function (a) {
+  // ===== ข้อมูลเว็บไซต์ที่แก้ไขได้ผ่าน Google Sheet =====
+  // วาง URL ของ Google Apps Script Web App ที่นี่ หลังตั้งค่าตามคู่มือ docs/google-sheet-setup.md
+  // ปล่อยว่างไว้ได้ — เว็บจะแสดงข้อมูลตัวอย่างด้านล่างไปก่อนจนกว่าจะตั้งค่าเสร็จ
+  var SHEET_API_URL = '';
+
+  var DEFAULT_SITE_DATA = {
+    staffAdmin: [
+      { initial: 'ผอ', role: 'ผู้อำนวยการโรงเรียน', name: 'ระบุชื่อ-นามสกุลผู้อำนวยการ', note: 'ส่งชื่อและรูปถ่ายผู้บริหารมาให้ได้ จะใส่ประวัติโดยย่อเพิ่มเติมให้' }
+    ],
+    staffGroups: [
+      { group: 'กลุ่มสาระการเรียนรู้ภาษาไทย', teachers: [
+        { initial: 'ค1', name: 'ระบุชื่อครูท่านที่ 1', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้คณิตศาสตร์', teachers: [
+        { initial: 'ค2', name: 'ระบุชื่อครูท่านที่ 2', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี', teachers: [
+        { initial: 'ค3', name: 'ระบุชื่อครูท่านที่ 3', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม', teachers: [
+        { initial: 'ค4', name: 'ระบุชื่อครูท่านที่ 4', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา', teachers: [
+        { initial: 'ค5', name: 'ระบุชื่อครูท่านที่ 5', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้ศิลปะ', teachers: [
+        { initial: 'ค6', name: 'ระบุชื่อครูท่านที่ 6', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้การงานอาชีพ', teachers: [
+        { initial: 'ค7', name: 'ระบุชื่อครูท่านที่ 7', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] },
+      { group: 'กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ', teachers: [
+        { initial: 'ค8', name: 'ระบุชื่อครูท่านที่ 8', subj: 'ระบุวิชา/ระดับชั้น' }
+      ] }
+    ],
+    departments: [
+      { name: 'ฝ่ายบริหารงานวิชาการ', desc: 'ดูแลหลักสูตร การจัดการเรียนการสอน การวัดและประเมินผล สื่อและแหล่งเรียนรู้ของโรงเรียน', links: [
+        { label: 'ระบบประเมิน SDQ ( นักเรียนประเมินตนเอง )', url: 'https://script.google.com/macros/s/AKfycbxvwWgT3gYz6DLAabHaS3onb5QwxgF1Pmnqe2srjiAnIm2n0i2Lc6XkuHtNKvUapDeX/exec' }
+      ] },
+      { name: 'ฝ่ายบริหารงานงบประมาณ', desc: 'ดูแลการเงิน พัสดุ ทรัพย์สินของโรงเรียน และการจัดทำแผนงบประมาณประจำปี', links: [
+        { label: 'เข้าสู่ระบบงานงบประมาณ', url: '#' }
+      ] },
+      { name: 'ฝ่ายบริหารงานบุคคล', desc: 'ดูแลอัตรากำลัง การพัฒนาบุคลากร ขวัญกำลังใจ และงานทะเบียนประวัติครู-บุคลากร', links: [
+        { label: 'ระบบการลาออนไลน์', url: 'https://pdrweb-system.github.io/leavesystem/' },
+        { label: 'ระบบประเมินตนเองเพื่อใช้ในการเลื่อนเงินเดือน', url: 'https://script.google.com/macros/s/AKfycbyALyaJatJ--njMdcXTTb0e2B87Em7AfI2aXlpOc3qeGmEXVIcsFFn1JAVT9Emz5sNgCw/exec' }
+      ] },
+      { name: 'ฝ่ายบริหารงานทั่วไป', desc: 'ดูแลอาคารสถานที่ งานสัมพันธ์ชุมชน งานธุรการ และกิจการนักเรียนโดยรวม', links: [
+        { label: 'เข้าสู่ระบบงานทั่วไป', url: '#' }
+      ] }
+    ],
+    contact: {
+      address: 'ระบุที่อยู่โรงเรียนที่นี่',
+      phone: 'ระบุเบอร์โทรศัพท์',
+      email: 'ระบุอีเมลติดต่อ',
+      facebook: 'https://www.facebook.com/preedaramschool1',
+      mapEmbedUrl: ''
+    }
+  };
+
+  function renderStaffAdmin(staffAdmin) {
+    var adminGrid = document.getElementById('adminGrid');
+    if (!adminGrid) return;
+    adminGrid.innerHTML = staffAdmin.map(function (a) {
       return '<div class="staff-lead">' +
         '<div class="avatar">' + a.initial + '</div>' +
         '<div>' +
@@ -611,34 +643,9 @@
     }).join('');
   }
 
-  var staffGroups = [
-    { group: 'กลุ่มสาระการเรียนรู้ภาษาไทย', teachers: [
-      { initial: 'ค1', name: 'ระบุชื่อครูท่านที่ 1', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้คณิตศาสตร์', teachers: [
-      { initial: 'ค2', name: 'ระบุชื่อครูท่านที่ 2', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี', teachers: [
-      { initial: 'ค3', name: 'ระบุชื่อครูท่านที่ 3', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม', teachers: [
-      { initial: 'ค4', name: 'ระบุชื่อครูท่านที่ 4', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา', teachers: [
-      { initial: 'ค5', name: 'ระบุชื่อครูท่านที่ 5', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้ศิลปะ', teachers: [
-      { initial: 'ค6', name: 'ระบุชื่อครูท่านที่ 6', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้การงานอาชีพ', teachers: [
-      { initial: 'ค7', name: 'ระบุชื่อครูท่านที่ 7', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] },
-    { group: 'กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ', teachers: [
-      { initial: 'ค8', name: 'ระบุชื่อครูท่านที่ 8', subj: 'ระบุวิชา/ระดับชั้น' }
-    ] }
-  ];
-  var staffGroupsEl = document.getElementById('staffGroups');
-  if (staffGroupsEl) {
+  function renderStaffGroups(staffGroups) {
+    var staffGroupsEl = document.getElementById('staffGroups');
+    if (!staffGroupsEl) return;
     staffGroupsEl.innerHTML = staffGroups.map(function (g) {
       var cards = g.teachers.map(function (t) {
         return '<div class="staff-card">' +
@@ -655,7 +662,10 @@
         '<div class="staff-group-body"><div class="staff-grid">' + cards + '</div></div>' +
         '</div>';
     }).join('');
+  }
 
+  var staffGroupsEl = document.getElementById('staffGroups');
+  if (staffGroupsEl) {
     staffGroupsEl.addEventListener('click', function (e) {
       var toggle = e.target.closest('.staff-group-toggle');
       if (!toggle) return;
@@ -663,6 +673,59 @@
       var isOpen = group.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
+  }
+
+  function renderDepartments(departments) {
+    var deptGrid = document.getElementById('deptGrid');
+    if (!deptGrid) return;
+    deptGrid.innerHTML = departments.map(function (d) {
+      var links = (d.links || []).map(function (l) {
+        return '<a class="dept-link" href="' + l.url + '" target="_blank" rel="noopener">' + l.label + ' →</a>';
+      }).join('<br>');
+      return '<div class="dept-card">' +
+        '<div class="dept-name">' + d.name + '</div>' +
+        '<p>' + d.desc + '</p>' +
+        links +
+        '</div>';
+    }).join('');
+  }
+
+  function renderContact(contact) {
+    var contactList = document.getElementById('contactList');
+    if (contactList) {
+      var fbDisplay = (contact.facebook || '').replace(/^https?:\/\/(www\.)?/, '');
+      contactList.innerHTML =
+        '<li><span class="k">ที่อยู่</span><span class="v">' + contact.address + '</span></li>' +
+        '<li><span class="k">โทรศัพท์</span><span class="v">' + contact.phone + '</span></li>' +
+        '<li><span class="k">อีเมล</span><span class="v">' + contact.email + '</span></li>' +
+        '<li><span class="k">Facebook</span><span class="v"><a href="' + contact.facebook + '" target="_blank" rel="noopener">' + fbDisplay + '</a></span></li>';
+    }
+    var mapBox = document.getElementById('mapBox');
+    if (mapBox) {
+      if (contact.mapEmbedUrl) {
+        mapBox.classList.add('has-iframe');
+        mapBox.innerHTML = '<iframe src="' + contact.mapEmbedUrl + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+      } else {
+        mapBox.classList.remove('has-iframe');
+        mapBox.innerHTML = 'แผนที่โรงเรียนจะแสดงที่นี่<br>เมื่อได้รับพิกัดหรือที่อยู่';
+      }
+    }
+  }
+
+  function renderSite(data) {
+    renderStaffAdmin(data.staffAdmin && data.staffAdmin.length ? data.staffAdmin : DEFAULT_SITE_DATA.staffAdmin);
+    renderStaffGroups(data.staffGroups && data.staffGroups.length ? data.staffGroups : DEFAULT_SITE_DATA.staffGroups);
+    renderDepartments(data.departments && data.departments.length ? data.departments : DEFAULT_SITE_DATA.departments);
+    renderContact(Object.assign({}, DEFAULT_SITE_DATA.contact, data.contact || {}));
+  }
+
+  renderSite(DEFAULT_SITE_DATA);
+
+  if (SHEET_API_URL) {
+    fetch(SHEET_API_URL)
+      .then(function (res) { return res.json(); })
+      .then(function (data) { renderSite(data); })
+      .catch(function (err) { console.error('โหลดข้อมูลจาก Google Sheet ไม่สำเร็จ ใช้ข้อมูลตัวอย่างแทน', err); });
   }
 
   function showRoute(route) {
