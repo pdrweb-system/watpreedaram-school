@@ -100,8 +100,8 @@ var SITE_DATA = {
     {
       name:     `ฝ่ายบริหารงานวิชาการ`,
       detail:   `ดูแลหลักสูตร การจัดการเรียนการสอน การวัดและประเมินผล สื่อและแหล่งเรียนรู้ของโรงเรียน`,
-      linkText: `เข้าสู่ระบบงานวิชาการ`,
-      url:      ``
+      linkText: `ระบบประเมิน SDQ ( นักเรียนประเมินตนเอง )`,
+      url:      `https://script.google.com/macros/s/AKfycbxvwWgT3gYz6DLAabHaS3onb5QwxgF1Pmnqe2srjiAnIm2n0i2Lc6XkuHtNKvUapDeX/exec`
     },
     {
       name:     `ฝ่ายบริหารงานงบประมาณ`,
@@ -112,8 +112,14 @@ var SITE_DATA = {
     {
       name:     `ฝ่ายบริหารงานบุคคล`,
       detail:   `ดูแลอัตรากำลัง การพัฒนาบุคลากร ขวัญกำลังใจ และงานทะเบียนประวัติครู-บุคลากร`,
-      linkText: `เข้าสู่ระบบงานบุคคล`,
-      url:      ``
+      linkText: `ระบบการลาออนไลน์`,
+      url:      `https://pdrweb-system.github.io/leavesystem/`
+    },
+    {
+      name:     `ฝ่ายบริหารงานบุคคล`,
+      detail:   `ดูแลอัตรากำลัง การพัฒนาบุคลากร ขวัญกำลังใจ และงานทะเบียนประวัติครู-บุคลากร`,
+      linkText: `ระบบประเมินตนเองเพื่อใช้ในการเลื่อนเงินเดือน`,
+      url:      `https://script.google.com/macros/s/AKfycbyALyaJatJ--njMdcXTTb0e2B87Em7AfI2aXlpOc3qeGmEXVIcsFFn1JAVT9Emz5sNgCw/exec`
     },
     {
       name:     `ฝ่ายบริหารงานทั่วไป`,
@@ -133,7 +139,7 @@ var SITE_DATA = {
     { label: `ที่อยู่`, value: `ระบุที่อยู่โรงเรียนที่นี่` },
     { label: `โทรศัพท์`, value: `ระบุเบอร์โทรศัพท์` },
     { label: `อีเมล`, value: `ระบุอีเมลติดต่อ` },
-    { label: `Facebook`, value: `ระบุลิงก์เพจโรงเรียน` },
+    { label: `Facebook`, value: `https://www.facebook.com/preedaramschool1` },
   ],
 
 
