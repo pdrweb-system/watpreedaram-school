@@ -51,20 +51,24 @@
     return Array.isArray(v) ? v : [];
   }
 
+  // รูปที่โหลดไม่ได้ (เช่น พิมพ์ชื่อไฟล์ผิด) จะถูกเอาออก แทนที่จะโชว์ไอคอนรูปเสีย
+  var DROP_BROKEN = ' onerror="this.remove()"';
+
   function avatar(photo, initial) {
-    return '<div class="avatar">' +
-      (hasUrl(photo) ? '<img src="' + esc(photo) + '" alt="" loading="lazy">' : esc(initial)) +
+    return '<div class="avatar"><span>' + esc(initial) + '</span>' +
+      (hasUrl(photo) ? '<img src="' + esc(photo) + '" alt="" loading="lazy"' + DROP_BROKEN + '>' : '') +
       '</div>';
   }
 
   // ---------- ข่าวสาร ----------
   function newsCard(n) {
     n = n || {};
+    var meta = (text(n.tag) ? '<span class="news-tag">' + esc(n.tag) + '</span>' : '') +
+      (text(n.date) ? '<span class="news-date">' + esc(n.date) + '</span>' : '');
     return '<div class="news-card">' +
-      (text(n.tag) ? '<div class="news-tag">' + esc(n.tag) + '</div>' : '') +
-      (hasUrl(n.image) ? '<img class="news-img" src="' + esc(n.image) + '" alt="" loading="lazy">' : '') +
+      (hasUrl(n.image) ? '<img class="news-img" src="' + esc(n.image) + '" alt="" loading="lazy"' + DROP_BROKEN + '>' : '') +
       '<div class="news-body">' +
-      (text(n.date) ? '<div class="news-date">' + esc(n.date) + '</div>' : '') +
+      (meta ? '<div class="news-meta">' + meta + '</div>' : '') +
       '<h3>' + esc(n.title) + '</h3>' +
       (text(n.body) ? '<p class="multiline">' + esc(n.body) + '</p>' : '') +
       (hasUrl(n.link) ? '<a class="more-link" href="' + esc(n.link) + '" target="_blank" rel="noopener">อ่านรายละเอียด</a>' : '') +
@@ -73,6 +77,37 @@
 
   function renderNews(id, items) {
     document.getElementById(id).innerHTML = items.map(newsCard).join('');
+  }
+
+  // ภาษาไทยไม่เว้นวรรคระหว่างคำ เบราว์เซอร์จึงอาจตัดบรรทัดกลางคำ เช่น "ความ|รู้"
+  // คำขวัญและชื่อที่เว้นวรรคระหว่างวลีไว้แล้ว ให้ตัดบรรทัดตรงช่องว่างเท่านั้น
+  // (วลียาวเกิน 20 ตัวอักษรยังตัดได้ตามปกติ จะได้ไม่ล้นจอมือถือ)
+  var PHRASE_TEXT = '.hero-quote > span, .identity-card .value, .vision blockquote > span, .page-header h1, .page-header p,' +
+    ' .section-title, footer .fname, footer .fmotto, .news-card h3, .staff-lead h3, .staff-card h4,' +
+    ' .staff-group .group-name, .dept-card .dept-name';
+
+  // เรียกซ้ำได้: ข้อความที่จัดแล้วจะไม่ถูกจัดซ้ำ
+  function protectPhrases() {
+    Array.prototype.slice.call(document.querySelectorAll(PHRASE_TEXT)).forEach(keepPhrasesTogether);
+  }
+
+  function keepPhrasesTogether(el) {
+    Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+      if (node.nodeType !== 3 || !/\S\s+\S/.test(node.data)) return;
+      var frag = document.createDocumentFragment();
+      node.data.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part) || part.length > 20) {
+          frag.appendChild(document.createTextNode(part));
+          return;
+        }
+        var span = document.createElement('span');
+        span.className = 'nowrap';
+        span.textContent = part;
+        frag.appendChild(span);
+      });
+      el.replaceChild(frag, node);
+    });
   }
 
   // จัดรายการเป็นกลุ่มตามชื่อ เรียงตามลำดับที่พบครั้งแรก
@@ -307,7 +342,7 @@
     bar.className = 'sheet-notice';
     bar.setAttribute('role', 'status');
     var kind = err && SHEET_PROBLEMS[err.kind] ? err.kind : 'other';
-    bar.textContent = '⚠ ดึงข้อมูลจาก Google Sheet ไม่สำเร็จ: ' + SHEET_PROBLEMS[kind] +
+    bar.textContent = 'ดึงข้อมูลจาก Google Sheet ไม่สำเร็จ: ' + SHEET_PROBLEMS[kind] +
       (kind === 'http' ? ' (HTTP ' + err.detail + ')' : '') +
       ' — หน้าบุคลากร ฝ่ายงาน และติดต่อเรา จึงแสดงข้อมูลจากไฟล์ data.js แทน';
     document.body.insertBefore(bar, document.body.firstChild);
@@ -328,6 +363,7 @@
     renderDepartments(list(data.departments));
     renderContact(list(data.contact));
     renderMap(data.map);
+    protectPhrases();
   }
 
   function renderAll(data) {
@@ -369,7 +405,7 @@
     var bar = document.createElement('div');
     bar.className = 'data-error';
     bar.setAttribute('role', 'alert');
-    bar.textContent = '⚠ ' + (dataError && dataError.lineno
+    bar.textContent = (dataError && dataError.lineno
       ? 'ไฟล์ data.js มีจุดที่พิมพ์ผิดประมาณบรรทัดที่ ' + dataError.lineno + missing +
         'ตรวจเครื่องหมาย , และ ` ที่บรรทัดนั้นหรือบรรทัดก่อนหน้า'
       : 'อ่านข้อมูลจากไฟล์ data.js ไม่ได้' + missing +
@@ -431,6 +467,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initRouting();
+    protectPhrases();
     var data = window.SITE_DATA;
     if (!data || typeof data !== 'object') {
       showDataError();
@@ -438,6 +475,7 @@
     }
     try {
       renderAll(data);
+      protectPhrases();
     } catch (err) {
       showDataError();
       if (window.console) console.error(err);

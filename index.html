@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -31,7 +31,11 @@
       <img src="images/logo.png" alt="ตราโรงเรียน" width="32" height="32">
       <span>วัดปรีดาราม</span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">เมนู ☰</button>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">
+      <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      เมนู
+    </button>
     <div class="nav-links" id="navLinks">
       <a href="#home" data-route="home">หน้าแรก</a>
       <a href="#about" data-route="about">เกี่ยวกับโรงเรียน</a>
@@ -51,9 +55,11 @@
       <h1>โรงเรียนวัดปรีดาราม<br>(มณีศิริวรรณ)
         <span class="en-name">WATPREEDARAM SCHOOL</span>
       </h1>
-      <p class="hero-quote">“คนดี มีความรู้ คู่คุณธรรม”</p>
-      <div class="color-strip"></div>
-      <div class="color-label">สีประจำโรงเรียน — เขียว · ขาว</div>
+      <p class="hero-quote"><span>“คนดี มีความรู้ คู่คุณธรรม”</span></p>
+      <div class="school-colors">
+        <span class="swatches" aria-hidden="true"><span class="swatch swatch-green"></span><span class="swatch swatch-white"></span></span>
+        สีประจำโรงเรียน เขียว – ขาว
+      </div>
     </div>
   </header>
 
@@ -79,9 +85,9 @@
       <h2 class="section-title">วิสัยทัศน์โรงเรียน</h2>
       <p class="section-sub">ทิศทางที่โรงเรียนยึดมั่นในการจัดการศึกษาให้แก่นักเรียนทุกคน</p>
       <blockquote>
-        ผู้เรียนเป็นคนดี มีความรู้ได้มาตรฐาน<br>
-        บริหารจัดการแบบมีส่วนร่วม<br>
-        บนพื้นฐานความเป็นไทย
+        <span>ผู้เรียนเป็นคนดี มีความรู้ได้มาตรฐาน</span>
+        <span>บริหารจัดการแบบมีส่วนร่วม</span>
+        <span>บนพื้นฐานความเป็นไทย</span>
       </blockquote>
     </div>
   </section>
@@ -151,7 +157,7 @@
       <!-- ผู้บริหารจาก Google Sheet แท็บ "ผู้บริหาร" (สำรอง: director ใน data.js) -->
       <div class="staff-leads" id="adminList"></div>
 
-      <h2 class="section-title" style="margin-top:44px;">คณะครูผู้สอน</h2>
+      <h2 class="section-title section-gap">คณะครูผู้สอน</h2>
       <p class="section-sub">คณะครูผู้สอนแต่ละระดับชั้นและกลุ่มสาระการเรียนรู้</p>
       <!-- ครูจาก Google Sheet แท็บ "กลุ่มสาระ" (สำรอง: teachers ใน data.js) -->
       <div id="teacherList"></div>
@@ -205,16 +211,18 @@
 </main>
 
 <footer>
+  <img class="footer-logo" src="images/logo.png" alt="" width="64" height="64" loading="lazy">
   <div class="fname">โรงเรียนวัดปรีดาราม (มณีศิริวรรณ)</div>
-  <div>WATPREEDARAM SCHOOL</div>
-  <div class="fnav">
+  <div class="fen">WATPREEDARAM SCHOOL</div>
+  <p class="fmotto">“คนดี มีความรู้ คู่คุณธรรม”</p>
+  <nav class="fnav" aria-label="เมนูท้ายหน้า">
     <a href="#home" data-route="home">หน้าแรก</a>
     <a href="#about" data-route="about">เกี่ยวกับโรงเรียน</a>
     <a href="#news" data-route="news">ข่าวสาร</a>
     <a href="#staff" data-route="staff">บุคลากร</a>
     <a href="#departments" data-route="departments">ฝ่ายงาน</a>
     <a href="#contact" data-route="contact">ติดต่อเรา</a>
-  </div>
+  </nav>
 </footer>
 
 <!-- main.js ต้องโหลดก่อน data.js เพื่อจับข้อผิดพลาดในไฟล์ข้อมูลและบอกเลขบรรทัดได้ -->
