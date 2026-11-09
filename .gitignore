@@ -1,0 +1,4 @@
+# Local Claude Code tooling (installed skills, etc.) — not part of the website
+.agents/
+.claude/
+skills-lock.json
