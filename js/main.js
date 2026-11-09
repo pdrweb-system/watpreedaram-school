@@ -1,6 +1,7 @@
 /* ==================================================================
    การทำงานของเว็บไซต์ — ปกติไม่ต้องแก้ไฟล์นี้
-   ข้อมูลที่แสดงบนเว็บ (ข่าว ครู ฝ่ายงาน ติดต่อ แผนที่) แก้ที่ไฟล์ data.js
+   ข่าวแก้ที่ไฟล์ data.js ส่วนผู้บริหาร ครู ฝ่ายงาน ติดต่อ และแผนที่
+   แก้ที่ Google Sheet (ลิงก์อยู่ที่ sheetUrl ใน data.js)
    ------------------------------------------------------------------
    ไฟล์นี้โหลดก่อน data.js เพื่อจับข้อผิดพลาดของ data.js ไว้ก่อน
    แล้วสร้างเนื้อหาและเปิดหน้าตาม #hash เมื่อหน้าเว็บโหลดครบ
@@ -37,9 +38,13 @@
   }
 
   // ลิงก์/รูปที่ยังไม่ได้ใส่ ('' หรือ '#') ถือว่าไม่มี
+  // รับเฉพาะ http(s):// หรือไฟล์ในเว็บ เช่น images/... เพราะข้อมูลจาก Google Sheet
+  // อาจมีคนอื่นร่วมแก้ได้ จึงไม่ยอมให้ลิงก์แบบ javascript: ฝังลงในหน้า
   function hasUrl(v) {
     v = text(v);
-    return v !== '' && v !== '#';
+    if (v === '' || v === '#') return false;
+    var bare = v.replace(/[\t\n\r]/g, '').replace(/^[\x00-\x20]+/, '');
+    return !/^[a-z][a-z0-9+.\-]*:/i.test(bare) || /^https?:\/\//i.test(bare);
   }
 
   function list(v) {
@@ -70,44 +75,90 @@
     document.getElementById(id).innerHTML = items.map(newsCard).join('');
   }
 
+  // จัดรายการเป็นกลุ่มตามชื่อ เรียงตามลำดับที่พบครั้งแรก
+  function groupBy(items, keyOf) {
+    var groups = [];
+    var byKey = Object.create(null);
+    items.forEach(function (item) {
+      var key = keyOf(item);
+      if (!byKey[key]) {
+        byKey[key] = { key: key, items: [] };
+        groups.push(byKey[key]);
+      }
+      byKey[key].items.push(item);
+    });
+    return groups;
+  }
+
   // ---------- บุคลากร ----------
-  function renderDirector(d) {
-    d = d || {};
-    document.getElementById('directorCard').innerHTML =
-      avatar(d.photo, 'ผอ') +
-      '<div>' +
-      '<div class="role">' + esc(text(d.role) || 'ผู้อำนวยการโรงเรียน') + '</div>' +
-      '<h3>' + esc(d.name) + '</h3>' +
-      (text(d.note) ? '<p class="multiline">' + esc(d.note) + '</p>' : '') +
+  // ผู้บริหารมีได้หลายท่าน (data.js ใส่ director ท่านเดียวได้ Google Sheet ใส่ได้หลายแถว)
+  function renderAdmins(admins) {
+    document.getElementById('adminList').innerHTML = admins.map(function (d) {
+      d = d || {};
+      return '<div class="staff-lead">' +
+        avatar(d.photo, text(d.initial) || 'ผอ') +
+        '<div>' +
+        '<div class="role">' + esc(text(d.role) || 'ผู้อำนวยการโรงเรียน') + '</div>' +
+        '<h3>' + esc(d.name) + '</h3>' +
+        (text(d.note) ? '<p class="multiline">' + esc(d.note) + '</p>' : '') +
+        '</div></div>';
+    }).join('');
+  }
+
+  function teacherCard(t) {
+    t = t || {};
+    return '<div class="staff-card">' +
+      avatar(t.photo, t.initial) +
+      '<h4>' + esc(t.name) + '</h4>' +
+      (text(t.subject) ? '<div class="subj">' + esc(t.subject) + '</div>' : '') +
       '</div>';
   }
 
+  // ครูที่ใส่ group แสดงเป็นแถบตามกลุ่มสาระ กดที่แถบเพื่อเปิดดูรายชื่อ
+  // ถ้าไม่มีใครใส่ group เลย แสดงเป็นตารางเดียว
   function renderTeachers(items) {
-    document.getElementById('staffGrid').innerHTML = items.map(function (t) {
-      t = t || {};
-      return '<div class="staff-card">' +
-        avatar(t.photo, t.initial) +
-        '<h4>' + esc(t.name) + '</h4>' +
-        (text(t.subject) ? '<div class="subj">' + esc(t.subject) + '</div>' : '') +
-        '</div>';
+    var groups = groupBy(items, function (t) { return text(t && t.group); });
+    var box = document.getElementById('teacherList');
+    if (groups.length === 1 && groups[0].key === '') {
+      box.innerHTML = '<div class="staff-grid">' + items.map(teacherCard).join('') + '</div>';
+      return;
+    }
+    // ครูที่ไม่ได้ระบุกลุ่มไว้ท้ายสุด
+    groups.sort(function (a, b) { return (a.key === '') - (b.key === ''); });
+    box.innerHTML = groups.map(function (g) {
+      return '<details class="staff-group">' +
+        '<summary><span class="group-name">' + esc(g.key || 'ครูและบุคลากรอื่น ๆ') + '</span>' +
+        '<span class="group-count">' + g.items.length + ' ท่าน</span></summary>' +
+        '<div class="staff-grid">' + g.items.map(teacherCard).join('') + '</div>' +
+        '</details>';
     }).join('');
   }
 
   // ---------- ฝ่ายงาน ----------
+  function deptButton(d) {
+    var label = text(d.linkText);
+    if (hasUrl(d.url)) {
+      return '<a class="dept-link" href="' + esc(d.url) + '" target="_blank" rel="noopener">' + esc(label || 'เข้าสู่ระบบงาน') + '</a>';
+    }
+    return label ? '<span class="dept-link is-disabled">' + esc(label) + ' (เร็ว ๆ นี้)</span>' : '';
+  }
+
+  // ฝ่ายที่มีหลายระบบงานใส่หลายรายการโดยใช้ชื่อฝ่ายเดียวกัน จะรวมเป็นการ์ดเดียว
   function renderDepartments(items) {
-    document.getElementById('deptGrid').innerHTML = items.map(function (d) {
-      d = d || {};
-      var label = text(d.linkText);
-      var button = '';
-      if (hasUrl(d.url)) {
-        button = '<a class="dept-link" href="' + esc(d.url) + '" target="_blank" rel="noopener">' + esc(label || 'เข้าสู่ระบบงาน') + '</a>';
-      } else if (label) {
-        button = '<span class="dept-link is-disabled">' + esc(label) + ' (เร็ว ๆ นี้)</span>';
-      }
+    var cards = groupBy(items, function (d) { return text(d && d.name); });
+    document.getElementById('deptGrid').innerHTML = cards.map(function (c) {
+      var detail = '';
+      var buttons = [];
+      c.items.forEach(function (d) {
+        d = d || {};
+        detail = detail || text(d.detail);
+        var b = deptButton(d);
+        if (b) buttons.push(b);
+      });
       return '<div class="dept-card">' +
-        '<div class="dept-name">' + esc(d.name) + '</div>' +
-        (text(d.detail) ? '<p>' + esc(d.detail) + '</p>' : '') +
-        button +
+        '<div class="dept-name">' + esc(c.key) + '</div>' +
+        (detail ? '<p>' + esc(detail) + '</p>' : '') +
+        (buttons.length ? '<div class="dept-links">' + buttons.join('') + '</div>' : '') +
         '</div>';
     }).join('');
   }
@@ -145,6 +196,7 @@
     var src = v.match(/\ssrc\s*=\s*["']([^"']+)["']/i);
     var url = (src ? src[1] : v).replace(/&amp;/g, '&');
 
+    box.classList.remove('has-map');
     if (/^https:\/\//i.test(url) && /\/maps\/embed|[?&]output=embed/i.test(url)) {
       box.classList.add('has-map');
       box.innerHTML = '<iframe src="' + esc(url) + '" title="แผนที่โรงเรียน" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>';
@@ -157,15 +209,158 @@
     }
   }
 
-  function renderAll(data) {
-    renderNews('homeNewsPreview', list(data.news).slice(0, 3));
-    renderNews('newsFullList', list(data.news));
-    renderDirector(data.director);
+  // ---------- Google Sheet ----------
+  // แปลง JSON จาก apps-script/Code.gs ให้อยู่ในรูปเดียวกับ data.js
+  // คืนเฉพาะหัวข้อที่ชีตมีข้อมูล หัวข้อที่ชีตไม่มีจะใช้ข้อมูลจาก data.js ต่อ
+  var CONTACT_LABELS = { address: 'ที่อยู่', phone: 'โทรศัพท์', email: 'อีเมล', facebook: 'Facebook', line: 'LINE' };
+
+  function fromSheet(s) {
+    s = s || {};
+    var out = {};
+
+    var admins = list(s.staffAdmin);
+    if (admins.length) out.director = admins;
+
+    var teachers = [];
+    list(s.staffGroups).forEach(function (g) {
+      g = g || {};
+      list(g.teachers).forEach(function (t) {
+        t = t || {};
+        teachers.push({ group: g.group, name: t.name, subject: t.subj, photo: t.photo, initial: t.initial });
+      });
+    });
+    if (teachers.length) out.teachers = teachers;
+
+    var depts = [];
+    list(s.departments).forEach(function (d) {
+      d = d || {};
+      var links = list(d.links).length ? list(d.links) : [{}];
+      links.forEach(function (l) {
+        l = l || {};
+        depts.push({ name: d.name, detail: d.desc, linkText: l.label, url: l.url });
+      });
+    });
+    if (depts.length) out.departments = depts;
+
+    // แท็บ "ติดต่อ" เป็น Key/Value: Key ที่ไม่รู้จักใช้เป็นหัวข้อตรง ๆ (เช่น LINE หรือพิมพ์ภาษาไทย)
+    var c = s.contact;
+    if (c && typeof c === 'object' && !Array.isArray(c)) {
+      var rows = [];
+      Object.keys(c).forEach(function (key) {
+        var k = text(key);
+        var lk = k.toLowerCase();
+        var v = text(c[key]);
+        if (!k || !v) return;
+        if (lk === 'mapembedurl' || lk === 'map') {
+          out.map = v;
+        } else {
+          rows.push({ label: Object.prototype.hasOwnProperty.call(CONTACT_LABELS, lk) ? CONTACT_LABELS[lk] : k, value: v });
+        }
+      });
+      if (rows.length) out.contact = rows;
+    }
+    return out;
+  }
+
+  var SHEET_PROBLEMS = {
+    badurl: 'ลิงก์ sheetUrl ใน data.js ต้องขึ้นต้นด้วย https://',
+    network: 'เชื่อมต่อไม่ได้ — ตรวจลิงก์ sheetUrl ใน data.js และตั้ง Who has access ของ Apps Script เป็น Anyone',
+    timeout: 'Google Sheet ตอบกลับช้าเกินไป',
+    http: 'Apps Script ตอบกลับผิดปกติ',
+    notjson: 'ลิงก์ sheetUrl ไม่ได้ส่งข้อมูลกลับมา — ต้องเป็นลิงก์ Web app ที่ลงท้ายด้วย /exec',
+    empty: 'เชื่อมต่อได้แต่ไม่พบข้อมูล — ตรวจชื่อแท็บและหัวตารางในชีตให้ตรงตามคู่มือ README',
+    other: 'ข้อมูลที่ได้จากชีตมีรูปแบบไม่ถูกต้อง'
+  };
+
+  function sheetProblem(kind, detail) {
+    var err = new Error(kind + (detail ? ' ' + detail : ''));
+    err.kind = kind;
+    err.detail = detail;
+    return err;
+  }
+
+  // ไม่ใส่ header เพิ่มใน fetch: Apps Script ไม่รองรับ CORS preflight
+  function loadSheet(url) {
+    if (!/^https:\/\//i.test(url)) return Promise.reject(sheetProblem('badurl'));
+    if (typeof fetch !== 'function') return Promise.reject(sheetProblem('network'));
+    var request = fetch(url).then(function (res) {
+      if (!res.ok) throw sheetProblem('http', res.status);
+      return res.text();
+    }, function (e) {
+      throw sheetProblem('network', e && e.message);
+    }).then(function (body) {
+      try {
+        return JSON.parse(body);
+      } catch (e) {
+        throw sheetProblem('notjson');
+      }
+    });
+    var timeout = new Promise(function (resolve, reject) {
+      setTimeout(function () { reject(sheetProblem('timeout')); }, 10000);
+    });
+    return Promise.race([request, timeout]);
+  }
+
+  // แถบสีเหลืองบนสุดของหน้า เห็นเฉพาะตอน showNotes เป็น true (โหมดผู้ดูแลเว็บ)
+  function showSheetNotice(err) {
+    var bar = document.createElement('div');
+    bar.className = 'sheet-notice';
+    bar.setAttribute('role', 'status');
+    var kind = err && SHEET_PROBLEMS[err.kind] ? err.kind : 'other';
+    bar.textContent = '⚠ ดึงข้อมูลจาก Google Sheet ไม่สำเร็จ: ' + SHEET_PROBLEMS[kind] +
+      (kind === 'http' ? ' (HTTP ' + err.detail + ')' : '') +
+      ' — หน้าบุคลากร ฝ่ายงาน และติดต่อเรา จึงแสดงข้อมูลจากไฟล์ data.js แทน';
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
+
+  function showLoading() {
+    var msg = 'กำลังโหลดข้อมูล…';
+    ['adminList', 'teacherList', 'deptGrid', 'mapBox'].forEach(function (id) {
+      document.getElementById(id).innerHTML = '<div class="loading">' + msg + '</div>';
+    });
+    document.getElementById('contactList').innerHTML = '<li class="loading">' + msg + '</li>';
+  }
+
+  // ---------- สร้างเนื้อหาทั้งหมด ----------
+  function renderSheetSections(data) {
+    renderAdmins([].concat(data.director || []));
     renderTeachers(list(data.teachers));
     renderDepartments(list(data.departments));
     renderContact(list(data.contact));
     renderMap(data.map);
+  }
+
+  function renderAll(data) {
+    renderNews('homeNewsPreview', list(data.news).slice(0, 3));
+    renderNews('newsFullList', list(data.news));
     if (data.showNotes === false) document.body.classList.add('hide-notes');
+
+    var sheetUrl = text(data.sheetUrl);
+    if (!sheetUrl) {
+      renderSheetSections(data);
+      return;
+    }
+
+    // รอข้อมูลจากชีตก่อน แทนที่จะโชว์ข้อมูลสำรองจาก data.js แล้วค่อยสลับ
+    showLoading();
+    loadSheet(sheetUrl).then(function (sheet) {
+      var fromS = fromSheet(sheet);
+      if (!Object.keys(fromS).length) throw sheetProblem('empty');
+      var merged = {};
+      Object.keys(data).forEach(function (k) { merged[k] = data[k]; });
+      Object.keys(fromS).forEach(function (k) { merged[k] = fromS[k]; });
+      renderSheetSections(merged);
+    }).catch(function (err) {
+      if (window.console) console.warn('Google Sheet:', err);
+      try {
+        renderSheetSections(data);
+      } catch (e) {
+        showDataError();
+        if (window.console) console.error(e);
+        return;
+      }
+      if (data.showNotes !== false) showSheetNotice(err);
+    });
   }
 
   // แถบสีแดงบนสุดของหน้า เมื่อ data.js พิมพ์ผิดจนอ่านข้อมูลไม่ได้
