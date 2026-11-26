@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -31,7 +31,11 @@
       <img src="images/logo.png" alt="ตราโรงเรียน" width="32" height="32">
       <span>วัดปรีดาราม</span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">เมนู ☰</button>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">
+      <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      เมนู
+    </button>
     <div class="nav-links" id="navLinks">
       <a href="#home" data-route="home">หน้าแรก</a>
       <a href="#about" data-route="about">เกี่ยวกับโรงเรียน</a>
@@ -51,9 +55,11 @@
       <h1>โรงเรียนวัดปรีดาราม<br>(มณีศิริวรรณ)
         <span class="en-name">WATPREEDARAM SCHOOL</span>
       </h1>
-      <p class="hero-quote">“คนดี มีความรู้ คู่คุณธรรม”</p>
-      <div class="color-strip"></div>
-      <div class="color-label">สีประจำโรงเรียน — เขียว · ขาว</div>
+      <p class="hero-quote"><span>“คนดี มีความรู้ คู่คุณธรรม”</span></p>
+      <div class="school-colors">
+        <span class="swatches" aria-hidden="true"><span class="swatch swatch-green"></span><span class="swatch swatch-white"></span></span>
+        สีประจำโรงเรียน เขียว – ขาว
+      </div>
     </div>
   </header>
 
@@ -79,9 +85,9 @@
       <h2 class="section-title">วิสัยทัศน์โรงเรียน</h2>
       <p class="section-sub">ทิศทางที่โรงเรียนยึดมั่นในการจัดการศึกษาให้แก่นักเรียนทุกคน</p>
       <blockquote>
-        ผู้เรียนเป็นคนดี มีความรู้ได้มาตรฐาน<br>
-        บริหารจัดการแบบมีส่วนร่วม<br>
-        บนพื้นฐานความเป็นไทย
+        <span>ผู้เรียนเป็นคนดี มีความรู้ได้มาตรฐาน</span>
+        <span>บริหารจัดการแบบมีส่วนร่วม</span>
+        <span>บนพื้นฐานความเป็นไทย</span>
       </blockquote>
     </div>
   </section>
@@ -147,16 +153,17 @@
   </div>
   <section>
     <div class="wrap">
-      <!-- ผู้อำนวยการจาก data.js -->
-      <div class="staff-lead" id="directorCard"></div>
+      <h2 class="section-title">ผู้บริหาร</h2>
+      <!-- ผู้บริหารจาก Google Sheet แท็บ "ผู้บริหาร" (สำรอง: director ใน data.js) -->
+      <div class="staff-leads" id="adminList"></div>
 
-      <h2 class="section-title" style="margin-top:44px;">คณะครูผู้สอน</h2>
+      <h2 class="section-title section-gap">คณะครูผู้สอน</h2>
       <p class="section-sub">คณะครูผู้สอนแต่ละระดับชั้นและกลุ่มสาระการเรียนรู้</p>
-      <!-- รายชื่อครูจาก data.js -->
-      <div class="staff-grid" id="staffGrid"></div>
+      <!-- ครูจาก Google Sheet แท็บ "กลุ่มสาระ" (สำรอง: teachers ใน data.js) -->
+      <div id="teacherList"></div>
 
       <div class="info-note">
-        รายชื่อด้านบนเป็นตัวอย่างการจัดวาง — แก้ชื่อผู้อำนวยการ รายชื่อครู วิชา/ระดับชั้นที่สอน และใส่รูปถ่ายได้ที่ไฟล์ data.js หัวข้อ “ผู้อำนวยการ” และ “คณะครูผู้สอน”
+        แก้รายชื่อผู้บริหารและครูได้ที่ Google Sheet ของโรงเรียน แท็บ “ผู้บริหาร” และ “กลุ่มสาระ” (ถ้ายังไม่ได้เชื่อม Google Sheet แก้ได้ที่ไฟล์ data.js หัวข้อ “ผู้อำนวยการ” และ “คณะครูผู้สอน”)
       </div>
     </div>
   </section>
@@ -171,10 +178,10 @@
   <section>
     <div class="wrap">
       <p class="section-sub">การบริหารงานของโรงเรียนแบ่งตามกรอบการบริหารงานสถานศึกษา แต่ละฝ่ายมีขอบเขตงานดังนี้</p>
-      <!-- ฝ่ายงานจาก data.js -->
+      <!-- ฝ่ายงานจาก Google Sheet แท็บ "ฝ่ายงาน" (สำรอง: departments ใน data.js) -->
       <div class="dept-grid" id="deptGrid"></div>
       <div class="info-note">
-        ชื่อฝ่ายเป็นโครงสร้างมาตรฐานที่ตั้งไว้ก่อน — ปรับชื่อฝ่าย ขอบเขตงาน และใส่ลิงก์ระบบงานจริงของแต่ละฝ่ายได้ที่ไฟล์ data.js หัวข้อ “ฝ่ายงาน” (ปุ่มที่ยังไม่มีลิงก์จะแสดงว่า “เร็ว ๆ นี้”)
+        แก้ชื่อฝ่าย ขอบเขตงาน และลิงก์ระบบงานได้ที่ Google Sheet แท็บ “ฝ่ายงาน” (ถ้ายังไม่ได้เชื่อม Google Sheet แก้ได้ที่ไฟล์ data.js หัวข้อ “ฝ่ายงาน”) ปุ่มที่ยังไม่มีลิงก์จะแสดงว่า “เร็ว ๆ นี้”
       </div>
     </div>
   </section>
@@ -190,13 +197,13 @@
     <div class="wrap">
       <div class="contact-grid">
         <div>
-          <!-- ข้อมูลติดต่อจาก data.js -->
+          <!-- ข้อมูลติดต่อจาก Google Sheet แท็บ "ติดต่อ" (สำรอง: contact ใน data.js) -->
           <ul class="contact-list" id="contactList"></ul>
           <div class="contact-note">
-            ส่วนนี้ยังเป็นข้อมูลตัวอย่าง — แก้ไขที่อยู่ เบอร์โทร อีเมล ลิงก์ Facebook และใส่แผนที่ Google Maps ได้ที่ไฟล์ data.js หัวข้อ “ติดต่อเรา” และ “แผนที่”
+            แก้ที่อยู่ เบอร์โทร อีเมล ช่องทางติดต่อ และแผนที่ Google Maps ได้ที่ Google Sheet แท็บ “ติดต่อ” (ถ้ายังไม่ได้เชื่อม Google Sheet แก้ได้ที่ไฟล์ data.js หัวข้อ “ติดต่อเรา” และ “แผนที่”)
           </div>
         </div>
-        <!-- แผนที่จาก data.js -->
+        <!-- แผนที่จาก Google Sheet แท็บ "ติดต่อ" แถว mapEmbedUrl (สำรอง: map ใน data.js) -->
         <div class="map-box" id="mapBox"></div>
       </div>
     </div>
@@ -204,16 +211,18 @@
 </main>
 
 <footer>
+  <img class="footer-logo" src="images/logo.png" alt="" width="64" height="64" loading="lazy">
   <div class="fname">โรงเรียนวัดปรีดาราม (มณีศิริวรรณ)</div>
-  <div>WATPREEDARAM SCHOOL</div>
-  <div class="fnav">
+  <div class="fen">WATPREEDARAM SCHOOL</div>
+  <p class="fmotto">“คนดี มีความรู้ คู่คุณธรรม”</p>
+  <nav class="fnav" aria-label="เมนูท้ายหน้า">
     <a href="#home" data-route="home">หน้าแรก</a>
     <a href="#about" data-route="about">เกี่ยวกับโรงเรียน</a>
     <a href="#news" data-route="news">ข่าวสาร</a>
     <a href="#staff" data-route="staff">บุคลากร</a>
     <a href="#departments" data-route="departments">ฝ่ายงาน</a>
     <a href="#contact" data-route="contact">ติดต่อเรา</a>
-  </div>
+  </nav>
 </footer>
 
 <!-- main.js ต้องโหลดก่อน data.js เพื่อจับข้อผิดพลาดในไฟล์ข้อมูลและบอกเลขบรรทัดได้ -->
