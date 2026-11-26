@@ -19,6 +19,8 @@ data.js                    ข้อมูลที่ผู้ใช้แก�
 css/style.css              สไตล์ทั้งหมด
 js/main.js                 routing + สร้างเนื้อหาจาก data.js / Google Sheet + แถบแจ้งข้อผิดพลาด
 apps-script/Code.gs        Apps Script ที่ผู้ใช้วางในชีตแล้ว Deploy เป็น Web app (ส่ง JSON ให้ main.js)
+.agents/skills/ui-ux-pro-max/  สกิล ui-ux-pro-max สำหรับ Codex (ดูหัวข้อ "สกิล ui-ux-pro-max")
+skills-lock.json           ที่มาและ hash ของสกิล (ไฟล์ของ `npx skills`)
 images/logo.png            ตราโรงเรียน (306x278 PNG พื้นโปร่งใส)
 images/favicon.png         ไอคอนแท็บ 96x96 (สร้างจากโลโก้)
 images/apple-touch-icon.png  ไอคอนหน้าจอมือถือ 180x180 พื้นขาว
@@ -109,6 +111,17 @@ images/news/, images/staff/  รูปที่ผู้ใช้อัปโห
 - รูปที่โหลดไม่ได้ถูกเอาออก (`onerror`) avatar จึงแสดงอักษรย่อแทนไอคอนรูปเสีย
 - Motion: เฟดเข้าตอนสลับหน้า 0.32s อย่างเดียว ปิดทั้งหมดเมื่อ `prefers-reduced-motion: reduce`
 - Responsive: เมนูพับเป็นปุ่ม "เมนู" (ไอคอน SVG) ที่ ≤880px (เมนูเต็มกว้าง ~812px) ปุ่ม/เมนูบนมือถือสูง ≥44px ไม่มี scroll แนวนอนที่ 320–1440px
+
+## สกิล ui-ux-pro-max
+- มาจาก `nextlevelbuilder/ui-ux-pro-max-skill` (MIT, LICENSE อยู่ในโฟลเดอร์สกิล) ติดตั้งด้วย
+  `npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max`
+- อยู่ที่ `.agents/skills/` เพราะ Codex อ่านสกิลของโปรเจกต์จากโฟลเดอร์นี้ (ระดับผู้ใช้คือ `~/.agents/skills`) ตามตาราง agent ของ skills CLI
+- **แก้ SKILL.md จากต้นฉบับ**: ต้นฉบับใช้ `${CLAUDE_PLUGIN_ROOT}/.claude/skills/...` ซึ่งมีเฉพาะตอนติดตั้งเป็น plugin ของ Claude Code
+  (เทสต์ของต้นฉบับเองระบุว่าติดตั้งผ่าน CLI จะไม่มีตัวแปรนี้) จึงเปลี่ยนเป็น `scripts/search.py` แบบ relative ต่อโฟลเดอร์สกิล
+  และคำสั่งเต็มจาก root คือ `python .agents/skills/ui-ux-pro-max/scripts/search.py` — ถ้า `npx skills update` ทับไฟล์ ต้องแก้ซ้ำ
+- Claude Code อ่านสกิลจาก `.claude/skills/` ซึ่งไม่ได้ commit (`.claude/` อยู่ใน .gitignore)
+  ถ้าต้องการให้ Claude Code ใช้ด้วย ให้ทำ symlink `.claude/skills/ui-ux-pro-max` → `../../.agents/skills/ui-ux-pro-max`
+- ผลจาก `--design-system` ของสกิลแนะนำสี/ฟอนต์ที่ไม่ตรงกับโรงเรียน (ไม่รองรับภาษาไทย) ให้ใช้เฉพาะแนวทาง style/UX แล้วคงสีและฟอนต์ตามหัวข้อ "ดีไซน์"
 
 ## ข้อมูลที่ยังเป็นตัวอย่าง (placeholder) ใน data.js
 - **news**: ข่าวตัวอย่าง 4 ชิ้น
