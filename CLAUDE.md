@@ -19,7 +19,8 @@ data.js                    ข้อมูลที่ผู้ใช้แก�
 css/style.css              สไตล์ทั้งหมด
 js/main.js                 routing + สร้างเนื้อหาจาก data.js / Google Sheet + แถบแจ้งข้อผิดพลาด
 apps-script/Code.gs        Apps Script ที่ผู้ใช้วางในชีตแล้ว Deploy เป็น Web app (ส่ง JSON ให้ main.js)
-.agents/skills/ui-ux-pro-max/  สกิล ui-ux-pro-max สำหรับ Codex (ดูหัวข้อ "สกิล ui-ux-pro-max")
+.agents/skills/ui-ux-pro-max/  สกิล ui-ux-pro-max ตัวจริง ที่ Codex อ่าน (ดูหัวข้อ "สกิล ui-ux-pro-max")
+.claude/skills/ui-ux-pro-max/SKILL.md  ไฟล์ชี้ทางให้ Claude Code ไปใช้สกิลใน .agents/skills/
 skills-lock.json           ที่มาและ hash ของสกิล (ไฟล์ของ `npx skills`)
 images/logo.png            ตราโรงเรียน (306x278 PNG พื้นโปร่งใส)
 images/favicon.png         ไอคอนแท็บ 96x96 (สร้างจากโลโก้)
@@ -119,8 +120,12 @@ images/news/, images/staff/  รูปที่ผู้ใช้อัปโห
 - **แก้ SKILL.md จากต้นฉบับ**: ต้นฉบับใช้ `${CLAUDE_PLUGIN_ROOT}/.claude/skills/...` ซึ่งมีเฉพาะตอนติดตั้งเป็น plugin ของ Claude Code
   (เทสต์ของต้นฉบับเองระบุว่าติดตั้งผ่าน CLI จะไม่มีตัวแปรนี้) จึงเปลี่ยนเป็น `scripts/search.py` แบบ relative ต่อโฟลเดอร์สกิล
   และคำสั่งเต็มจาก root คือ `python .agents/skills/ui-ux-pro-max/scripts/search.py` — ถ้า `npx skills update` ทับไฟล์ ต้องแก้ซ้ำ
-- Claude Code อ่านสกิลจาก `.claude/skills/` ซึ่งไม่ได้ commit (`.claude/` อยู่ใน .gitignore)
-  ถ้าต้องการให้ Claude Code ใช้ด้วย ให้ทำ symlink `.claude/skills/ui-ux-pro-max` → `../../.agents/skills/ui-ux-pro-max`
+- Claude Code อ่านสกิลจาก `.claude/skills/` ซึ่ง commit แล้ว (ส่วนอื่นใน `.claude/` ยังอยู่ใน .gitignore) จึงโหลดให้ทุก session ของ repo นี้ ทั้งบนเว็บและในเครื่อง
+  `.claude/skills/ui-ux-pro-max/SKILL.md` เป็นไฟล์สั้นที่มี name/description เหมือนตัวจริง แล้วบอกให้อ่าน `.agents/skills/ui-ux-pro-max/SKILL.md`
+  ข้อมูลสกิลจึงมีชุดเดียว ถ้า description ของตัวจริงเปลี่ยน ให้แก้ไฟล์นี้ตาม
+- ไม่ใช้ symlink แบบที่ `npx skills add` สร้าง เพราะ git บน Windows มักเช็กเอาต์ symlink เป็นไฟล์ข้อความ ถ้า `npx skills` สร้าง symlink ทับ ให้เปลี่ยนกลับเป็นไฟล์ชี้ทาง
+- ไม่ได้ติดตั้งเป็น plugin ของ Claude Code เพราะ Claude Code บนเว็บใช้ `/plugin` ไม่ได้ และตามเอกสาร Claude Code
+  cloud session ไม่เพิ่ม marketplace ที่ repo ประกาศไว้ใน `.claude/settings.json` (`extraKnownMarketplaces`) ส่วน `.claude/skills/` โหลดได้เพราะเป็นส่วนหนึ่งของ repo
 - ผลจาก `--design-system` ของสกิลแนะนำสี/ฟอนต์ที่ไม่ตรงกับโรงเรียน (ไม่รองรับภาษาไทย) ให้ใช้เฉพาะแนวทาง style/UX แล้วคงสีและฟอนต์ตามหัวข้อ "ดีไซน์"
 
 ## ข้อมูลที่ยังเป็นตัวอย่าง (placeholder) ใน data.js
